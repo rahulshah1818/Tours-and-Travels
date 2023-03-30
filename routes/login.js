@@ -7,14 +7,14 @@ const router = express.Router();
 router.post("/login", (req, res) => {
     // Validation
     if (!req.body.email || !req.body.password) {
-        res.status(200).json({message:"Please fill out all fields"});
+        res.status(400).json({message:"Please fill out all fields"});
     } else {
         // Check if user exists
         user.findOne({ email: req.body.email })
     .then(result => {
         // code to handle the result
         if (!result) {
-            res.status(200).json({message:"Email address not found"});
+            res.status(404).json({message:"Email address not found"});
         } else {
             // Check if password is correct
             if (req.body.password == result.password) {
@@ -22,7 +22,7 @@ router.post("/login", (req, res) => {
                     message: "Login successful", 
              })
             } else {
-                res.status(200).json({message : "Incorrect password"});
+                res.status(400).json({message : "Incorrect password"});
             }
         }
     })
