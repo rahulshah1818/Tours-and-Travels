@@ -14,7 +14,7 @@ router.post("/login", (req, res) => {
     .then(result => {
         // code to handle the result
         if (!result) {
-            res.status(404).json({message:"Email address not found"});
+            res.status(404).json({message:"Email address not foun"});
         } else {
             // Check if password is correct
             if (req.body.password == result.password) {
