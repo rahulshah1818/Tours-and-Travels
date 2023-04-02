@@ -17,7 +17,7 @@ mongoose.connection
 
 app.use(cors({origin: '*'}));
 
-app.get("/", (req, res) => res.json("Server is running..."))
+app.get("/", (req, res) => res.json(`Server is running at PORT ${PORT}...`))
 
 app.use("/api", loginRouter);
 
