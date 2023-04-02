@@ -4,6 +4,7 @@ const user = require('../models/user');
 const router = express.Router();
 
 
+
 router.post("/login", (req, res) => {
     // Validation
     if (!req.body.email || !req.body.password) {
@@ -14,7 +15,7 @@ router.post("/login", (req, res) => {
     .then(result => {
         // code to handle the result
         if (!result) {
-            res.status(404).json({message:"Email address not foun"});
+            res.status(404).json({message:"Email address not found"});
         } else {
             // Check if password is correct
             if (req.body.password == result.password) {
