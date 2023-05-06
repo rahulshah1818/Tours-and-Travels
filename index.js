@@ -1,24 +1,50 @@
-const express = require("express");
-const loginRouter = require("./routes/login");
+import  express from 'express'
+import dotenv from 'dotenv' 
+import mongoose from 'mongoose'
+import cors from 'cors'
+import cookieParser from 'cookie-parser'
+import tourRoute from './routes/tours.js';
+import userRoute from './routes/users';
 
 
-const app = express();
-app.use(express.json());
+dotenv.config()
+const app = express()
+const port = process.env.PORT ||  8000
 
-const { default : mongoose} = require("mongoose");
-const cors = require("cors");
+// for testing
+app.get("/", (req, res)=> {
+    res.send("api is working");
+});
 
-const PORT = process.env.PORT || 3500;
+// database connection
+mongoose.set("strictQuery", false);
 
-mongoose.connect("mongodb+srv://sujal:sujal123@cluster0.uvrc2et.mongodb.net/?retryWrites=true&w=majority", {useNewURLParser: true, useUnifiedTopology: true})
-mongoose.connection
-.once("open", () => console.log("Connected to database..."))
-.on("error", (error) => console.log("Error connecting to database...", error))
+const connect = async()=>{
+    try{
+        await mongoose.connect(process.env.MONGO_URI,{
 
-app.use(cors({origin: '*'}));
+            useNewUrlParser: true,
+        });
+        console.log("MongoDB database connected");
+        
+    } catch (err){
+        console.log("mongodb database connection failed")
+       // console.log("MongoDB databse connection failed");
 
-app.get("/", (req, res) => res.json(`Server is running at PORT ${PORT}...`))
+    }
+}
 
-app.use("/api", loginRouter);
 
-app.listen(PORT, () => console.log(`Listening to port ${PORT}`))
+// middleware
+app.use (express.json);
+app.use(cors());
+app.use(cookieParser());
+app.use('/tours', tourRoute);
+app.use("/users", userRoute);
+
+
+
+app.listen(port, ()=>{
+    connect();
+    console.log('server listening on port',port);
+})
